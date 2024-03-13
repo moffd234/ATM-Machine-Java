@@ -252,6 +252,23 @@ public class OptionMenu {
 
 
 	// Takes user's Account number and pin then writes them to Account.txt
+	// TODO - Store account info like balances in a dictionary
+	/*
+	Accounts{
+		<AccountID> : {
+			AccountID : <AccountID>,
+			AccountPin : <AccountPin>,
+			AccountSavingsBalance: <SavingsBalance>,
+			AccountCheckingBalance: <CheckingBalance>
+		}
+		<AccountID2> : {
+			AccountID : <AccountID>,
+			AccountPin : <AccountPin>,
+			AccountSavingsBalance: <SavingsBalance>,
+			AccountCheckingBalance: <CheckingBalance>
+		}
+	}
+	 */
 	public void writeUserToFile(int accNum, int pin){
 		try {
 			String toWrite = "Account Number: " + accNum + "\nAccount Pin: " + pin;
