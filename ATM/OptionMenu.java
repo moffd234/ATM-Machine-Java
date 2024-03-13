@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -10,6 +12,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Scanner;
 
+
+// TODO - Fix areas where we are referencing the full file path instead of a relative path
 public class OptionMenu {
 	Scanner menuInput = new Scanner(System.in);
 	DecimalFormat moneyFormat = new DecimalFormat("'$'###,##0.00");
@@ -226,9 +230,31 @@ public class OptionMenu {
 		menuInput.close();
 		System.exit(0);
 	}
-	public void writeUserToFile(int num, int pin){
+
+	public boolean userAlreadyExists(int accNum){
+		File file = new File("/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Accounts.txt");
+		boolean found = false;
+        try {
+            Scanner fileReader = new Scanner(file);
+
+			// Iterate over the file lines checking if each line contains the account number
+			while(fileReader.hasNext() && !found) {
+				if (fileReader.nextLine().contains("Account Number: " + accNum)) {
+					found = true;
+				}
+			}
+        } catch (FileNotFoundException e) {
+			System.out.println("File not found");
+        }
+
+		return found;
+	}
+
+
+	// Takes user's Account number and pin then writes them to Account.txt
+	public void writeUserToFile(int accNum, int pin){
 		try {
-			String toWrite = "Account Number: " + num + "\nAccount Pin: " + pin;
+			String toWrite = "Account Number: " + accNum + "\nAccount Pin: " + pin;
 			Files.write(Paths.get("/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Accounts.txt"),
 					toWrite.getBytes(), StandardOpenOption.APPEND);
 
