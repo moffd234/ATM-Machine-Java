@@ -1,7 +1,7 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -232,23 +232,21 @@ public class OptionMenu {
 	}
 
 	public boolean userAlreadyExists(int accNum){
-		File file = new File("/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Accounts.txt");
-		boolean found = false;
-        try {
-            Scanner fileReader = new Scanner(file);
-
-			// Iterate over the file lines checking if each line contains the account number
-			while(fileReader.hasNext() && !found) {
-				if (fileReader.nextLine().contains("Account Number: " + accNum)) {
-					found = true;
-				}
+		try{
+			JSONObject accountsData = readJsonFile();
+			// Check if the account number exists in the JSON Object
+			if(accountsData.containsKey(String.valueOf(accNum))){
+				System.out.println(accountsData);
+				return true;
 			}
-        } catch (FileNotFoundException e) {
-			System.out.println("File not found");
-        }
 
-		return found;
-	}
+		}
+		catch (FileNotFoundException e) {
+			System.out.println("JSON File Not Found");
+			return false;
+        }
+		return false;
+    }
 
 
 	// Takes user's Account number and pin then writes them to Account.txt
@@ -286,4 +284,15 @@ public class OptionMenu {
 	// TODO - public void logFileExists(int accNum){}
 	// TODO - public void createLogFile(int accNum){}
 	// TODO - public void readLogFile(int accNum){}
+	public JSONObject readJsonFile() throws FileNotFoundException {
+        JSONObject file =  (JSONObject) JSONValue.parse(new FileReader("/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Accounts.json"));
+
+		// Check if there is a key called Accounts
+		if(file.containsKey("Accounts")){
+			// Return the key & value of Accounts as a JSON Object
+			return (JSONObject) file.get("Accounts");
+		}
+		return null;
+	}
+
 }
