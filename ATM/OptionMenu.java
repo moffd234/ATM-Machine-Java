@@ -271,7 +271,7 @@ public class OptionMenu {
 	 */
 	public void writeUserToFile(int accNum, int pin){
 		try {
-			String toWrite = "Account Number: " + accNum + "\nAccount Pin: " + pin;
+			String toWrite = "\nAccount Number: " + accNum + "\nAccount Pin: " + pin;
 			Files.write(Paths.get("/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Accounts.txt"),
 					toWrite.getBytes(), StandardOpenOption.APPEND);
 
@@ -281,4 +281,9 @@ public class OptionMenu {
 			System.out.println("File Not Found");
 		}
 	}
+	// Create a directory of logs
+	// Each user will have their own logFile in the directory which holds transaction logs
+	// TODO - public void logFileExists(int accNum){}
+	// TODO - public void createLogFile(int accNum){}
+	// TODO - public void readLogFile(int accNum){}
 }
