@@ -47,7 +47,8 @@ public class OptionMenu {
 				System.out.println("\nSelect the account you want to access: ");
 				System.out.println(" Type 1 - Checking Account");
 				System.out.println(" Type 2 - Savings Account");
-				System.out.println(" Type 3 - Exit");
+				System.out.println(" Type 3 - View All Balances");
+				System.out.println(" Type 4 - Exit");
 				System.out.print("\nChoice: ");
 
 				int selection = menuInput.nextInt();
@@ -60,6 +61,8 @@ public class OptionMenu {
 					getSaving(acc);
 					break;
 				case 3:
+					viewAllBalances(acc);
+				case 4:
 					end = true;
 					break;
 				default:
@@ -149,6 +152,12 @@ public class OptionMenu {
 				menuInput.next();
 			}
 		}
+	}
+	public void viewAllBalances(Account acc){
+		double checkBalance = acc.getCheckingBalance();
+		double savingBalance = acc.getSavingBalance();
+		System.out.println("\nChecking Account Balance: " + moneyFormat.format(checkBalance));
+		System.out.println("\nSaving Account Balance: " + moneyFormat.format(savingBalance));
 	}
 
 	public void createAccount() throws IOException {
