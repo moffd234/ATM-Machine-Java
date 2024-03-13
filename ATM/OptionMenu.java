@@ -1,4 +1,8 @@
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -184,6 +188,7 @@ public class OptionMenu {
 		}
 		System.out.println("\nEnter PIN to be registered");
 		int pin = menuInput.nextInt();
+		writeUserToFile(cst_no, pin); // Writes account to the Accounts.txt file
 		data.put(cst_no, new Account(cst_no, pin));
 		System.out.println("\nYour new account has been successfuly registered!");
 		System.out.println("\nRedirecting to login.............");
@@ -220,5 +225,17 @@ public class OptionMenu {
 		System.out.println("\nThank You for using this ATM.\n");
 		menuInput.close();
 		System.exit(0);
+	}
+	public void writeUserToFile(int num, int pin){
+		try {
+			String toWrite = "Account Number: " + num + "\nAccount Pin: " + pin;
+			Files.write(Paths.get("/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Accounts.txt"),
+					toWrite.getBytes(), StandardOpenOption.APPEND);
+
+		}catch (IOException e) {
+
+			//exception handling left as an exercise for the reader
+			System.out.println("File Not Found");
+		}
 	}
 }
