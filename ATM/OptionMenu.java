@@ -39,7 +39,7 @@ public class OptionMenu {
 				while (it.hasNext()) {
 					Map.Entry pair = (Map.Entry) it.next();
 					Account acc = (Account) pair.getValue();
-					if (data.containsKey(customerNumber) && pinNumber == acc.getPinNumber()) {
+					if (isValidLogin(customerNumber, pinNumber)) {
 						getAccountType(acc);
 						end = true;
 						break;
