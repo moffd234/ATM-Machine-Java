@@ -253,6 +253,18 @@ public class OptionMenu {
 		return false;
     }
 
+	public boolean isValidLogin(int accNum, int pin) throws FileNotFoundException {
+		JSONObject accountsData = readAccountsJson();
+		// Checks if account number is in the accountsData
+		if(accountsData.containsKey(String.valueOf(accNum))){
+			// Gets the JSON object of the account
+			JSONObject accObject = (JSONObject) accountsData.get(String.valueOf(accNum));
+			int actualPin = Integer.parseInt((String) accObject.get("AccountPin"));
+            return actualPin == pin;
+		}
+		return false;
+	}
+
 	public void writeUserToFile(int accNum, int pin){
 		try {
 			JSONObject accountsData = readFullJson();
