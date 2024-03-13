@@ -28,10 +28,13 @@ public class OptionMenu {
 		int pinNumber = 0;
 		while (!end) {
 			try {
+
+				// Get pin and account number
 				System.out.print("\nEnter your customer number: ");
 				customerNumber = menuInput.nextInt();
 				System.out.print("\nEnter your PIN number: ");
 				pinNumber = menuInput.nextInt();
+
 				Iterator it = data.entrySet().iterator();
 				while (it.hasNext()) {
 					Map.Entry pair = (Map.Entry) it.next();
@@ -181,7 +184,7 @@ public class OptionMenu {
 				Iterator it = data.entrySet().iterator();
 				while (it.hasNext()) {
 					Map.Entry pair = (Map.Entry) it.next();
-					if (!data.containsKey(cst_no)) {
+					if (!userAlreadyExists(cst_no)) {
 						end = true;
 					}
 				}
@@ -239,7 +242,6 @@ public class OptionMenu {
 			JSONObject accountsData = readAccountsJson();
 			// Check if the account number exists in the JSON Object
 			if(accountsData.containsKey(String.valueOf(accNum))){
-				System.out.println(accountsData);
 				return true;
 			}
 
@@ -251,24 +253,6 @@ public class OptionMenu {
 		return false;
     }
 
-
-	// Takes user's Account number and pin then writes them to Account.txt
-	/*
-	Accounts{
-		<AccountID> : {
-			AccountID : <AccountID>,
-			AccountPin : <AccountPin>,
-			AccountSavingsBalance: <SavingsBalance>,
-			AccountCheckingBalance: <CheckingBalance>
-		}
-		<AccountID2> : {
-			AccountID : <AccountID>,
-			AccountPin : <AccountPin>,
-			AccountSavingsBalance: <SavingsBalance>,
-			AccountCheckingBalance: <CheckingBalance>
-		}
-	}
-	 */
 	public void writeUserToFile(int accNum, int pin){
 		try {
 			JSONObject accountsData = readFullJson();
