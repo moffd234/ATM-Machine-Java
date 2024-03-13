@@ -2,9 +2,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -14,6 +11,12 @@ import java.util.Scanner;
 
 
 // TODO - Fix areas where we are referencing the full file path instead of a relative path
+// TODO - public void logFileExists(int accNum){}
+// TODO - public void createLogFile(int accNum){}
+// TODO - public void readLogFile(int accNum){}
+
+// Create a directory of logs
+// Each user will have their own logFile in the directory which holds transaction logs
 public class OptionMenu {
 	Scanner menuInput = new Scanner(System.in);
 	DecimalFormat moneyFormat = new DecimalFormat("'$'###,##0.00");
@@ -233,7 +236,7 @@ public class OptionMenu {
 
 	public boolean userAlreadyExists(int accNum){
 		try{
-			JSONObject accountsData = readJsonFile();
+			JSONObject accountsData = readAccountsJson();
 			// Check if the account number exists in the JSON Object
 			if(accountsData.containsKey(String.valueOf(accNum))){
 				System.out.println(accountsData);
@@ -250,7 +253,6 @@ public class OptionMenu {
 
 
 	// Takes user's Account number and pin then writes them to Account.txt
-	// TODO - Store account info like balances in a dictionary
 	/*
 	Accounts{
 		<AccountID> : {
@@ -269,9 +271,20 @@ public class OptionMenu {
 	 */
 	public void writeUserToFile(int accNum, int pin){
 		try {
-			String toWrite = "\nAccount Number: " + accNum + "\nAccount Pin: " + pin;
-			Files.write(Paths.get("/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Accounts.txt"),
-					toWrite.getBytes(), StandardOpenOption.APPEND);
+			JSONObject accountsData = readFullJson();
+
+			// Create new JSON Object for the new account entry
+			JSONObject newAccount = new JSONObject();
+			newAccount.put("AccountID", String.valueOf(accNum));
+			newAccount.put("Account Pin", String.valueOf(pin));
+			newAccount.put("Savings Balance", "0"); // Each account starts with $0
+			newAccount.put("Checking Balance", "0");
+
+			// Add new account to accounts
+			JSONObject accounts = (JSONObject) accountsData.get("Accounts");
+			accounts.put(String.valueOf(accNum), newAccount);
+
+			writeJsonFile(accountsData);
 
 		}catch (IOException e) {
 
@@ -279,12 +292,7 @@ public class OptionMenu {
 			System.out.println("File Not Found");
 		}
 	}
-	// Create a directory of logs
-	// Each user will have their own logFile in the directory which holds transaction logs
-	// TODO - public void logFileExists(int accNum){}
-	// TODO - public void createLogFile(int accNum){}
-	// TODO - public void readLogFile(int accNum){}
-	public JSONObject readJsonFile() throws FileNotFoundException {
+	public JSONObject readAccountsJson() throws FileNotFoundException {
         JSONObject file =  (JSONObject) JSONValue.parse(new FileReader("/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Accounts.json"));
 
 		// Check if there is a key called Accounts
@@ -295,4 +303,17 @@ public class OptionMenu {
 		return null;
 	}
 
+	public JSONObject readFullJson() throws FileNotFoundException {
+		return (JSONObject)
+				JSONValue.parse(new FileReader("/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Accounts.json"));
+	}
+
+	public void writeJsonFile(JSONObject jsonData){
+		try(FileWriter fileWriter = new FileWriter("/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Accounts.json")){
+			JSONValue.writeJSONString(jsonData, fileWriter);
+			System.out.println("SUCCESSFUL ACCOUNT WRITE");
+		} catch (IOException e){
+			System.out.println("Error writing to JSON file");
+		}
+	}
 }

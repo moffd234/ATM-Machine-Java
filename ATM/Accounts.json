@@ -1,11 +1,1 @@
-{
-  "Accounts": {
-    "1": {
-      "AccountID": "1",
-      "AccountPin" : "1",
-      "AccountSavingsBalance": "0",
-      "AccountCheckingBalance": "0"
-    },
-    "2": {}
-  }
-}
+{"Accounts":{"6373":{"Account Pin":"6373","Savings Balance":"0","Checking Balance":"0","AccountID":"6373"},"1":{"CheckingBalance":"0","AccountID":"1","AccountPin":"1","SavingsBalance":"0"},"23":{"Account Pin":"23","Savings Balance":"0","Checking Balance":"0","AccountID":"23"},"2":{},"420024":{"Account Pin":"420024","Savings Balance":"0","Checking Balance":"0","AccountID":"420024"}}}
