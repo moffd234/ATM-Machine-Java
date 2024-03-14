@@ -169,8 +169,10 @@ public class OptionMenu {
 			} catch (InputMismatchException e) {
 				System.out.println("\nInvalid Choice.");
 				menuInput.next();
-			}
-		}
+			} catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
 	}
 	public void viewAllBalances(Account acc){
 		double checkBalance = acc.getCheckingBalance();

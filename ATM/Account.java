@@ -1,6 +1,8 @@
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -110,7 +112,7 @@ public class Account {
 		}
 	}
 
-	public void getsavingWithdrawInput() {
+	public void getsavingWithdrawInput() throws FileNotFoundException {
 		boolean end = false;
 		while (!end) {
 			try {
@@ -118,6 +120,15 @@ public class Account {
 				System.out.print("\nAmount you want to withdraw from Savings Account: ");
 				double amount = input.nextDouble();
 				if ((savingBalance - amount) >= 0 && amount >= 0) {
+					//Update the account balance in the JSON File
+					JSONObject currentAccount = getCurrentAccountJson(); // Reads the current account from the json file
+					double newBalance = savingBalance - amount;
+					currentAccount.put("Savings Balance", newBalance);
+
+					JSONObject accountsData = readAccountsJson();
+					accountsData.put(String.valueOf(getCustomerNumber()), currentAccount);
+					writeJson(accountsData);
+
 					calcSavingWithdraw(amount);
 					System.out.println("\nCurrent Savings Account Balance: " + moneyFormat.format(savingBalance));
 					end = true;
@@ -245,5 +256,19 @@ public class Account {
 		} catch (IOException e){
 			System.out.println("Error writing to JSON file");
 		}
+	}
+	public JSONObject readAccountsJson() throws FileNotFoundException {
+		JSONObject file =  (JSONObject) JSONValue.parse(new FileReader("/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Accounts.json"));
+
+		// Check if there is a key called Accounts
+		if(file.containsKey("Accounts")){
+			// Return the key & value of Accounts as a JSON Object
+			return (JSONObject) file.get("Accounts");
+		}
+		return null;
+	}
+	public JSONObject getCurrentAccountJson() throws FileNotFoundException {
+		JSONObject accountsData = readAccountsJson();
+        return (JSONObject) accountsData.get(String.valueOf(getCustomerNumber()));
 	}
 }
