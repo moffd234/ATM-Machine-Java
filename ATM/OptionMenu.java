@@ -192,6 +192,7 @@ public class OptionMenu {
 				while (it.hasNext()) {
 					Map.Entry pair = (Map.Entry) it.next();
 					if (!userAlreadyExists(cst_no)) {
+						createLogFile(cst_no);
 						end = true;
 					}
 				}
@@ -266,7 +267,7 @@ public class OptionMenu {
 		if(accountsData.containsKey(String.valueOf(accNum))){
 			// Gets the JSON object of the account
 			JSONObject accObject = (JSONObject) accountsData.get(String.valueOf(accNum));
-			int actualPin = Integer.parseInt((String) accObject.get("AccountPin"));
+			int actualPin = Integer.parseInt((String) accObject.get("Account Pin"));
             return actualPin == pin;
 		}
 		return false;
@@ -317,6 +318,14 @@ public class OptionMenu {
 			System.out.println("SUCCESSFUL ACCOUNT WRITE");
 		} catch (IOException e){
 			System.out.println("Error writing to JSON file");
+		}
+	}
+	public void createLogFile(int accNum) {
+		String filePath = "/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Logs/" + accNum +".log";
+		try (FileWriter fileWriter = new FileWriter(filePath)){
+			fileWriter.write("Account Opened");
+		} catch (IOException e) {
+			e.getStackTrace();
 		}
 	}
 }
