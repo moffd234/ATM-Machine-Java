@@ -1,10 +1,7 @@
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -250,7 +247,6 @@ public class Account {
 						System.out.print("\nAmount you want to deposit into your Savings Account: ");
 						double amount = input.nextDouble();
 						if ((savingBalance + amount) >= 0 && (checkingBalance - amount) >= 0 && amount >= 0) {
-
 							//Update the SAVING account balance in the JSON File
 							JSONObject currentSavingsAccount = getCurrentAccountJson(); // Reads the current account from the json file
 							double newSavingsBalance = savingBalance + amount;
@@ -334,6 +330,7 @@ public class Account {
 							JSONObject updatedCheckingData = new JSONObject();
 							updatedCheckingData.put("Accounts", accountsCheckingData);
 							writeJson(updatedCheckingData);
+
 
 							calcSavingTransfer(amount);
 							System.out.println("\nCurrent checking account balance: " + moneyFormat.format(checkingBalance));

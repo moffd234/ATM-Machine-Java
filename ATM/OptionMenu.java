@@ -109,14 +109,30 @@ public class OptionMenu {
 					System.out.println("\nChecking Account Balance: " + moneyFormat.format(acc.getCheckingBalance()));
 					break;
 				case 2:
+					double checkingBeforeWithdraw = acc.getCheckingBalance();
 					acc.getCheckingWithdrawInput();
+					double amountAfterWithdraw = checkingBeforeWithdraw - acc.getCheckingBalance();
+					String withdrawOutput = "Withdrew $" + amountAfterWithdraw + " from Checking.\n" +
+							"New Checking total $" + acc.getCheckingBalance();
+					addToLog(withdrawOutput, acc.getCustomerNumber());
 					break;
 				case 3:
+					double checkingBeforeDeposit = acc.getCheckingBalance();
 					acc.getCheckingDepositInput();
+					double amount = acc.getCheckingBalance() - checkingBeforeDeposit;
+					String depositOutput = "Deposited $" + amount + " into Checking.\n" +
+							"New Checking total $" + acc.getCheckingBalance();
+					addToLog(depositOutput, acc.getCustomerNumber());
 					break;
 
 				case 4:
+					double prevCheckingAmount = acc.getCheckingBalance();
 					acc.getTransferInput("Checking");
+					double change = Math.abs(prevCheckingAmount - acc.getCheckingBalance());
+					String message = "Transferred $" + change + " from checking to savings.\n" +
+							"New Checking total: $" + acc.getCheckingBalance() +
+							"\nNew Savings total $" + acc.getSavingBalance();
+					addToLog(message, acc.getCustomerNumber());
 					break;
 				case 5:
 					end = true;
@@ -148,13 +164,29 @@ public class OptionMenu {
 					System.out.println("\nSavings Account Balance: " + moneyFormat.format(acc.getSavingBalance()));
 					break;
 				case 2:
+					double savingsBeforeWithdraw = acc.getSavingBalance();
 					acc.getSavingWithdrawInput();
+					double amountChanged = savingsBeforeWithdraw - acc.getSavingBalance();
+					String withdrawOutput = "Withdrew $" + amountChanged + " from Savings.\n" +
+							"New Savings total $" + acc.getSavingBalance();
+					addToLog(withdrawOutput, acc.getCustomerNumber());
 					break;
 				case 3:
+					double savingsBeforeDeposit = acc.getSavingBalance();
 					acc.getSavingDepositInput();
+					double amountDeposited = acc.getSavingBalance() - savingsBeforeDeposit;
+					String depositOutput = "Deposited $" + amountDeposited + " into Savings.\n" +
+							"New Savings total $" + acc.getSavingBalance();
+					addToLog(depositOutput, acc.getCustomerNumber());
 					break;
 				case 4:
+					double prevSavingsAmount = acc.getSavingBalance();
 					acc.getTransferInput("Savings");
+					double change = Math.abs(prevSavingsAmount - acc.getSavingBalance());
+					String message = "Transferred $" + change + " from checking to savings.\n" +
+							"New Checking total: $" + acc.getCheckingBalance() +
+							"\nNew Savings total $" + acc.getSavingBalance();
+					addToLog(message, acc.getCustomerNumber());
 					break;
 				case 5:
 					end = true;
@@ -319,7 +351,7 @@ public class OptionMenu {
 	public void createLogFile(int accNum) {
 		String filePath = "/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Logs/" + accNum +".log";
 		try (FileWriter fileWriter = new FileWriter(filePath)){
-			fileWriter.write("Account Opened");
+			fileWriter.write("Account Opened\n");  // Add new line so there is separation between lines
 		} catch (IOException e) {
 			e.getStackTrace();
 		}
@@ -335,5 +367,17 @@ public class OptionMenu {
         } catch (FileNotFoundException e) {
 			System.out.println(Arrays.toString(e.getStackTrace()));
         }
+	}
+	// Write transaction to the log file
+	public void addToLog(String message, int customerNumber){
+		String filePath = "/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Logs/" + customerNumber +".log";
+		try{
+			FileWriter fileWriter = new FileWriter(filePath, true); // Sets append mode
+			fileWriter.write(message + "\n"); // Add a new line so that next message is separated
+			fileWriter.close();  // Won't write to the file if not closed
+		} catch (IOException e) {
+			e.getStackTrace();
+		}
+
 	}
 }
