@@ -127,7 +127,11 @@ public class Account {
 
 					JSONObject accountsData = readAccountsJson();
 					accountsData.put(String.valueOf(getCustomerNumber()), currentAccount);
-					writeJson(accountsData);
+
+					// Adds the "Accounts" key back to the top since the above code seems to remove it
+					JSONObject updatedDate = new JSONObject();
+					updatedDate.put("Accounts", accountsData);
+					writeJson(updatedDate);
 
 					calcSavingWithdraw(amount);
 					System.out.println("\nCurrent Savings Account Balance: " + moneyFormat.format(savingBalance));

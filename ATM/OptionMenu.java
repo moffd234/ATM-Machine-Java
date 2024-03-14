@@ -303,7 +303,7 @@ public class OptionMenu {
 			// Return the key & value of Accounts as a JSON Object
 			return (JSONObject) file.get("Accounts");
 		}
-		return null;
+		return (JSONObject) file.get("Accounts");
 	}
 
 	public JSONObject readFullJson() throws FileNotFoundException {
