@@ -152,7 +152,7 @@ public class OptionMenu {
 					System.out.println("\nSavings Account Balance: " + moneyFormat.format(acc.getSavingBalance()));
 					break;
 				case 2:
-					acc.getsavingWithdrawInput();
+					acc.getSavingWithdrawInput();
 					break;
 				case 3:
 					acc.getSavingDepositInput();
