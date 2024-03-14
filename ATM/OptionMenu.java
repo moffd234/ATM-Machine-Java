@@ -3,17 +3,10 @@ import org.json.simple.JSONValue;
 
 import java.io.*;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 
-// TODO - Fix areas where we are referencing the full file path instead of a relative path
-// TODO - public void logFileExists(int accNum){}
 // TODO - public void createLogFile(int accNum){}
-// TODO - public void readLogFile(int accNum){}
 
 // Create a directory of logs
 // Each user will have their own logFile in the directory which holds transaction logs
@@ -67,7 +60,8 @@ public class OptionMenu {
 				System.out.println(" Type 1 - Checking Account");
 				System.out.println(" Type 2 - Savings Account");
 				System.out.println(" Type 3 - View All Balances");
-				System.out.println(" Type 4 - Exit");
+				System.out.println(" Type 4 - View Full Account Log");
+				System.out.println(" Type 5 - Exit");
 				System.out.print("\nChoice: ");
 
 				int selection = menuInput.nextInt();
@@ -82,6 +76,8 @@ public class OptionMenu {
 				case 3:
 					viewAllBalances(acc);
 				case 4:
+					readUserLog(acc.getCustomerNumber());
+				case 5:
 					end = true;
 					break;
 				default:
@@ -327,5 +323,17 @@ public class OptionMenu {
 		} catch (IOException e) {
 			e.getStackTrace();
 		}
+	}
+	public void readUserLog(int accNum){
+		String filePath = "/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Logs/" + accNum +".log";
+        Scanner logScanner;
+        try {
+            logScanner = new Scanner(new File(filePath));
+			while(logScanner.hasNextLine()){
+				System.out.println(logScanner.nextLine());
+			}
+        } catch (FileNotFoundException e) {
+			System.out.println(Arrays.toString(e.getStackTrace()));
+        }
 	}
 }
