@@ -169,6 +169,19 @@ public class Account {
 				System.out.print("\nAmount you want to deposit from Checking Account: ");
 				double amount = input.nextDouble();
 				if ((checkingBalance + amount) >= 0 && amount >= 0) {
+					//Update the account balance in the JSON File
+					JSONObject currentAccount = getCurrentAccountJson(); // Reads the current account from the json file
+					double newBalance = checkingBalance + amount;
+					currentAccount.put("Checking Balance", newBalance);
+
+					JSONObject accountsData = readAccountsJson();
+					accountsData.put(String.valueOf(getCustomerNumber()), currentAccount);
+
+					// Adds the "Accounts" key back to the top level since the above code seems to remove it
+					JSONObject updatedDate = new JSONObject();
+					updatedDate.put("Accounts", accountsData);
+					writeJson(updatedDate);
+
 					calcCheckingDeposit(amount);
 					System.out.println("\nCurrent Checking Account Balance: " + moneyFormat.format(checkingBalance));
 					end = true;
@@ -178,8 +191,10 @@ public class Account {
 			} catch (InputMismatchException e) {
 				System.out.println("\nInvalid Choice.");
 				input.next();
-			}
-		}
+			} catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
 	}
 
 	public void getSavingDepositInput() {
@@ -191,6 +206,19 @@ public class Account {
 				double amount = input.nextDouble();
 
 				if ((savingBalance + amount) >= 0 && amount >= 0) {
+					//Update the account balance in the JSON File
+					JSONObject currentAccount = getCurrentAccountJson(); // Reads the current account from the json file
+					double newBalance = savingBalance + amount;
+					currentAccount.put("Savings Balance", newBalance);
+
+					JSONObject accountsData = readAccountsJson();
+					accountsData.put(String.valueOf(getCustomerNumber()), currentAccount);
+
+					// Adds the "Accounts" key back to the top level since the above code seems to remove it
+					JSONObject updatedDate = new JSONObject();
+					updatedDate.put("Accounts", accountsData);
+					writeJson(updatedDate);
+
 					calcSavingDeposit(amount);
 					System.out.println("\nCurrent Savings Account Balance: " + moneyFormat.format(savingBalance));
 					end = true;
@@ -200,8 +228,10 @@ public class Account {
 			} catch (InputMismatchException e) {
 				System.out.println("\nInvalid Choice.");
 				input.next();
-			}
-		}
+			} catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
 	}
 
 	public void getTransferInput(String accType) {
