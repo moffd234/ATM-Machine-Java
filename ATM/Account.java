@@ -250,6 +250,35 @@ public class Account {
 						System.out.print("\nAmount you want to deposit into your Savings Account: ");
 						double amount = input.nextDouble();
 						if ((savingBalance + amount) >= 0 && (checkingBalance - amount) >= 0 && amount >= 0) {
+
+							//Update the SAVING account balance in the JSON File
+							JSONObject currentSavingsAccount = getCurrentAccountJson(); // Reads the current account from the json file
+							double newSavingsBalance = savingBalance + amount;
+							currentSavingsAccount.put("Savings Balance", newSavingsBalance);
+
+							JSONObject accountsSavingData = readAccountsJson();
+							accountsSavingData.put(String.valueOf(getCustomerNumber()), currentSavingsAccount);
+
+							// Adds the "Accounts" key back to the top level since the above code seems to remove it
+							JSONObject updatedSavingsData = new JSONObject();
+							updatedSavingsData.put("Accounts", accountsSavingData);
+							writeJson(updatedSavingsData);
+
+
+
+							//Update the CHECKING account balance in the JSON File
+							JSONObject currentCheckingAccount = getCurrentAccountJson(); // Reads the current account from the json file
+							double newCheckingBalance = checkingBalance - amount;
+							currentCheckingAccount.put("Checking Balance", newCheckingBalance);
+
+							JSONObject accountsCheckingData = readAccountsJson();
+							accountsCheckingData.put(String.valueOf(getCustomerNumber()), currentCheckingAccount);
+
+							// Adds the "Accounts" key back to the top level since the above code seems to remove it
+							JSONObject updatedCheckingData = new JSONObject();
+							updatedCheckingData.put("Accounts", accountsCheckingData);
+							writeJson(updatedCheckingData);
+
 							calcCheckTransfer(amount);
 							System.out.println("\nCurrent Savings Account Balance: " + moneyFormat.format(savingBalance));
 							System.out.println(
@@ -277,6 +306,35 @@ public class Account {
 						System.out.print("\nAmount you want to deposit into your savings account: ");
 						double amount = input.nextDouble();
 						if ((checkingBalance + amount) >= 0 && (savingBalance - amount) >= 0 && amount >= 0) {
+
+							//Update the SAVING account balance in the JSON File
+							JSONObject currentSavingsAccount = getCurrentAccountJson(); // Reads the current account from the json file
+							double newSavingsBalance = savingBalance - amount;
+							currentSavingsAccount.put("Savings Balance", newSavingsBalance);
+
+							JSONObject accountsSavingData = readAccountsJson();
+							accountsSavingData.put(String.valueOf(getCustomerNumber()), currentSavingsAccount);
+
+							// Adds the "Accounts" key back to the top level since the above code seems to remove it
+							JSONObject updatedSavingsData = new JSONObject();
+							updatedSavingsData.put("Accounts", accountsSavingData);
+							writeJson(updatedSavingsData);
+
+
+
+							//Update the CHECKING account balance in the JSON File
+							JSONObject currentCheckingAccount = getCurrentAccountJson(); // Reads the current account from the json file
+							double newCheckingBalance = checkingBalance + amount;
+							currentCheckingAccount.put("Checking Balance", newCheckingBalance);
+
+							JSONObject accountsCheckingData = readAccountsJson();
+							accountsCheckingData.put(String.valueOf(getCustomerNumber()), currentCheckingAccount);
+
+							// Adds the "Accounts" key back to the top level since the above code seems to remove it
+							JSONObject updatedCheckingData = new JSONObject();
+							updatedCheckingData.put("Accounts", accountsCheckingData);
+							writeJson(updatedCheckingData);
+
 							calcSavingTransfer(amount);
 							System.out.println("\nCurrent checking account balance: " + moneyFormat.format(checkingBalance));
 							System.out.println("\nCurrent savings account balance: " + moneyFormat.format(savingBalance));
@@ -295,8 +353,10 @@ public class Account {
 			} catch (InputMismatchException e) {
 				System.out.println("\nInvalid Choice.");
 				input.next();
-			}
-		}
+			} catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
 	}
 	public void writeJson(JSONObject jsonData){
 		try(FileWriter fileWriter = new FileWriter("/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Accounts.json")){
