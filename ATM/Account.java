@@ -1,3 +1,8 @@
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -70,6 +75,7 @@ public class Account {
 
 	public double calcSavingDeposit(double amount) {
 		savingBalance = (savingBalance + amount);
+
 		return savingBalance;
 	}
 
@@ -230,6 +236,14 @@ public class Account {
 				System.out.println("\nInvalid Choice.");
 				input.next();
 			}
+		}
+	}
+	public void writeJson(JSONObject jsonData){
+		try(FileWriter fileWriter = new FileWriter("/Users/dan/Dev/Zipcode/Week 2/ATM-Machine-Java/ATM/Accounts.json")){
+			JSONValue.writeJSONString(jsonData, fileWriter);
+			System.out.println("SUCCESSFUL ACCOUNT UPDATE");
+		} catch (IOException e){
+			System.out.println("Error writing to JSON file");
 		}
 	}
 }

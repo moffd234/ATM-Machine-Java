@@ -38,8 +38,13 @@ public class OptionMenu {
 				Iterator it = data.entrySet().iterator();
 				while (it.hasNext()) {
 					Map.Entry pair = (Map.Entry) it.next();
-					Account acc = (Account) pair.getValue();
+					Account acc;
 					if (isValidLogin(customerNumber, pinNumber)) {
+						JSONObject accounts = readAccountsJson();
+						JSONObject currentAccount = (JSONObject) accounts.get(String.valueOf(customerNumber));
+						double savingsTotal = Double.parseDouble(String.valueOf(currentAccount.get("Savings Balance")));
+						double checkingTotal = Double.parseDouble(String.valueOf(currentAccount.get("Checking Balance")));
+						acc = new Account(customerNumber, pinNumber, checkingTotal, savingsTotal);
 						getAccountType(acc);
 						end = true;
 						break;
@@ -198,9 +203,9 @@ public class OptionMenu {
 		}
 		System.out.println("\nEnter PIN to be registered");
 		int pin = menuInput.nextInt();
-		writeUserToFile(cst_no, pin); // Writes account to the Accounts.txt file
+		writeUserToFile(cst_no, pin);
 		data.put(cst_no, new Account(cst_no, pin));
-		System.out.println("\nYour new account has been successfuly registered!");
+		System.out.println("\nYour new account has been successfully registered!");
 		System.out.println("\nRedirecting to login.............");
 		getLogin();
 	}
